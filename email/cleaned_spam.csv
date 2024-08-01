@@ -1,0 +1,23 @@
+import pandas as pd
+
+# Load the dataset
+try:
+    # Read the file
+    data = pd.read_csv('/mnt/data/spam.csv', encoding='latin-1')
+    print(data.head())  # Print the first few lines to inspect
+except Exception as e:
+    print(f"Error reading the CSV file: {e}")
+
+# Manually split the single column into 'label' and 'message'
+data[['label', 'message']] = data[data.columns[0]].str.split('\t', 1, expand=True)
+
+# Drop rows with any NaN values
+data.dropna(inplace=True)
+
+# Verify the columns after split
+print(data.head())
+
+# Save the cleaned data to a new CSV file
+cleaned_file_path = '/mnt/data/cleaned_spam.csv'
+data.to_csv(cleaned_file_path, index=False)
+print(f"Cleaned data saved to {cleaned_file_path}")
